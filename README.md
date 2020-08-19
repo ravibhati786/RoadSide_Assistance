@@ -15,7 +15,7 @@ How to contribute.<br/>
   d.Check the box to checkout.<br/>
 7.Open file manager and move to the project folder where it is saved.<br/>
 8.Move inside the project folder and right click->git-bash.<br/>
-9.Type the command ->git remote add upstream https://github.com/AlbinoB/Attendance-App-2.0.git<br/>
+9.Type the command ->git remote add upstream https://github.com/ravibhati786/RoadSide_Assistance.git<br/>
 Note:Creating an upstream to be in sync with master and your branch.<br/>
 10.Type the command->git fetch upstream<br/>
 Note:fetches any updates on master and stores the changes in a separate branch ->upstream/master<br/>
