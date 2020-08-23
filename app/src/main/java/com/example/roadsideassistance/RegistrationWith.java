@@ -17,7 +17,7 @@ public class RegistrationWith extends AppCompatActivity {
 
     ImageView top_curve;
     TextView logo,login_title;
-    LinearLayout new_user_layout;
+    LinearLayout new_user_layout,already_have_account_text;
     CardView login_card,login_card1 ;
 
     @Override
@@ -30,6 +30,7 @@ public class RegistrationWith extends AppCompatActivity {
         login_title = findViewById(R.id.login_text);
         logo = findViewById(R.id.logo);
         new_user_layout = findViewById(R.id.new_user_text);
+        already_have_account_text = findViewById(R.id.already_have_account_text);
         login_card = findViewById(R.id.login_card);
         login_card1 = findViewById(R.id.login_card1);
 
@@ -44,7 +45,7 @@ public class RegistrationWith extends AppCompatActivity {
         Animation center_reveal_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.center_reveal_anim);
         login_card.startAnimation(center_reveal_anim);
         login_card1.startAnimation(center_reveal_anim);
-
+        already_have_account_text.startAnimation(center_reveal_anim);
 
     }
 
@@ -63,7 +64,7 @@ public class RegistrationWith extends AppCompatActivity {
                 loadingDialog.dismissDialog();
             }
         },5000);
-        startActivity(new Intent(this,Registration.class));
+        startActivity(new Intent(this, CustomerRegistration.class));
     }
 
     public void btnmechanic(View view) {
@@ -80,9 +81,14 @@ public class RegistrationWith extends AppCompatActivity {
             }
         },5000);
 
-        //startActivity(new Intent(this,OtpVerification.class));
+        startActivity(new Intent(this,MechanicRegistration.class));
     }
 
+
+    public void login (View view){
+
+        startActivity( new Intent(this,Login.class));
+    }
 
 }
 
