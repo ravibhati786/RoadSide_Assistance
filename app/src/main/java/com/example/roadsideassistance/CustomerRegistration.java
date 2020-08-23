@@ -13,9 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class Registration extends AppCompatActivity {
+public class CustomerRegistration extends AppCompatActivity {
 
 
     ImageView top_curve;
@@ -28,7 +27,7 @@ public class Registration extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        setContentView(R.layout.activity_customer_registration);
 
 
         top_curve = findViewById(R.id.top_curve);
@@ -77,7 +76,7 @@ public class Registration extends AppCompatActivity {
     public void registerButton(View view) {
 
 
-        final LoadingDialog loadingDialog = new LoadingDialog(Registration.this);
+        final LoadingDialog loadingDialog = new LoadingDialog(CustomerRegistration.this);
 
         loadingDialog.startLoadingDialog();
         Handler handler = new Handler();

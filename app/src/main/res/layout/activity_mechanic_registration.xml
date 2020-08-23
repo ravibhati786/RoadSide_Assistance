@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Registration">
+    tools:context=".MechanicRegistration">
+
     <ImageView
         android:id="@+id/top_curve"
         android:layout_width="match_parent"
@@ -83,7 +84,8 @@
                     android:paddingTop="30dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="50dp">
+                    android:paddingBottom="50dp"
+                    android:id="@+id/new_user_text">
 
                     <TextView
                         android:id="@+id/name_text"
@@ -103,6 +105,25 @@
                         android:hint=""
                         android:inputType="text"
                         android:ems="15"/>
+                    <TextView
+                        android:id="@+id/shop_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shop Name"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:id="@+id/shopname"
+                        android:hint=""
+                        android:inputType="text"
+                        android:ems="15"/>
+
 
                     <TextView
                         android:id="@+id/email_text"
@@ -163,7 +184,25 @@
                         android:ems="15"
                         android:inputType="number"
                         android:textSize="14sp"/>
+                    <TextView
+                        android:id="@+id/address_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Address"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold" />
 
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:id="@+id/address_mechanic"
+                        android:ems="15"
+                        android:inputType="textPostalAddress"
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -192,7 +231,7 @@
                         android:layout_height="match_parent"
                         android:text="Register"
                         android:textSize="16sp"
-                        android:onClick="registerButton"
+                        android:onClick="btnmechanic"
                         android:id="@+id/register_button"
                         android:textStyle="bold"
                         android:ems="15"
@@ -202,31 +241,11 @@
                         />
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:id="@+id/already_have_account_text"
-                android:padding="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Already Have Account?"
-                    android:textSize="16sp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Login"
-                    android:textStyle="bold"
-                    android:textColor="@color/green"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="login"
-                    android:textSize="16sp"/>
-            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

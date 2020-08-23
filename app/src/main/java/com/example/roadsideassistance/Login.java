@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Login extends AppCompatActivity {
 
@@ -78,7 +77,7 @@ public void loginbtn(View view){
         }
     },5000);
 
-    startActivity(new Intent(this,DriverMapActivity.class));
+    startActivity(new Intent(this, CustomerMapActivity.class));
 }
 
     public void register(View view) {
