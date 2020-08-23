@@ -66,7 +66,7 @@ public class CustomerRegistration extends AppCompatActivity {
         register_card.startAnimation(center_reveal_anim);
 
         Animation new_user_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.down_top);
-        already_have_account_layout.startAnimation(new_user_anim);
+        
 
     }
 
