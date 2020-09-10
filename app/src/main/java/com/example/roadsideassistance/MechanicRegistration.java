@@ -3,21 +3,44 @@ package com.example.roadsideassistance;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MechanicRegistration extends AppCompatActivity {
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MechanicRegistration extends AppCompatActivity implements View.OnClickListener {
 
     ImageView top_curve;
     EditText name,shop_name, email, password,mobnumber,address;
     TextView name_text,shop_text, email_text, password_text,mobile_text , login_title,address_text;
+    Button buttonMachanicRegister;
+    private String emailPattern =  "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    private String mobilePattern = "[0-9]{10}";
+    private ProgressDialog progressDialog;
     TextView logo;
     LinearLayout new_user;
     //LinearLayout already_have_account_layout;
@@ -39,13 +62,98 @@ public class MechanicRegistration extends AppCompatActivity {
         password_text = findViewById(R.id.password_text);
         mobile_text = findViewById(R.id.mobnumber_text);
         mobnumber = findViewById(R.id.mobnumber);
-        address  = findViewById(R.id.address_mechanic);
-        address_text = findViewById(R.id.address_text);
+
         logo = findViewById(R.id.logo);
         login_title = findViewById(R.id.registration_title);
         new_user =findViewById(R.id.new_user_text);
+        buttonMachanicRegister = findViewById(R.id.register_button);
         //already_have_account_layout = findViewById(R.id.already_have_account_text);
         register_card = findViewById(R.id.register_card);
+
+        progressDialog = new ProgressDialog(this);
+
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        shop_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mobnumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        buttonMachanicRegister.setOnClickListener(this);
+
 
 
 
@@ -70,7 +178,104 @@ public class MechanicRegistration extends AppCompatActivity {
 
     }
 
-    public void btnmechanic(View view){
-        startActivity(new Intent(this,MechanicMapActivity.class));
+    private void registerMechanic() {
+
+        final String mechanic_Name = name.getText().toString().trim();
+        final String mechanic_ShopName = shop_name.getText().toString().trim();
+        final String mechanic_email = email.getText().toString().trim();
+        final String mechanic_password = password.getText().toString().trim();
+        final String mechanic_MobileNumber = mobnumber.getText().toString().trim();
+
+
+        progressDialog.setMessage("Registering Mechanic.....");
+        progressDialog.show();
+        buttonMachanicRegister.setEnabled(false);
+        buttonMachanicRegister.setTextColor(Color.argb(50,255,233,255));
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_MECHANIC_REGISTER,
+                new Response.Listener<String>() {
+                    @Override
+                    //if there will not be any error this method     executed
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    //for the error this method will be executed
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.hide();
+                        buttonMachanicRegister.setEnabled(true);
+                        buttonMachanicRegister.setTextColor(Color.rgb(255,255,255));
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        )//here we are override a method
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("AssistantName",mechanic_Name);
+                params.put("AssitantShopName",mechanic_ShopName);
+                params.put("AsistantEmail",mechanic_email);
+                params.put("AssistantPassword",mechanic_password);
+                params.put("AssistantMobile",mechanic_MobileNumber);
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+    }
+    @Override
+    public void onClick(View view) {
+        if(view == buttonMachanicRegister){
+            checkEmailAndMobile();
+        }
+    }
+    private void checkEmailAndMobile(){
+        if(email.getText().toString().matches(emailPattern)){
+            if(mobnumber.getText().toString().matches((mobilePattern))){
+                registerMechanic();
+            }else {
+                mobnumber.setError("Invalid Mobile number");
+            }
+        }else{
+            email.setError("Invalid Email");
+        }
+    }
+
+    private void checkInputs(){
+        if(!TextUtils.isEmpty(name.getText())){
+            if(!TextUtils.isEmpty(shop_name.getText())) {
+                if (!TextUtils.isEmpty(email.getText())) {
+                    if (!TextUtils.isEmpty(password.getText()) && password.length() >= 8) {
+                        if (!TextUtils.isEmpty(mobnumber.getText())) {
+                            buttonMachanicRegister.setEnabled(true);
+                            buttonMachanicRegister.setTextColor(Color.rgb(255, 255, 255));
+                        }else {
+                            buttonMachanicRegister.setEnabled(false);
+                            buttonMachanicRegister.setTextColor(Color.argb(50, 255, 233, 255));
+                        }
+                    } else {
+                        buttonMachanicRegister.setEnabled(false);
+                        buttonMachanicRegister.setTextColor(Color.argb(50, 255, 233, 255));
+                    }
+                } else {
+                    buttonMachanicRegister.setEnabled(false);
+                    buttonMachanicRegister.setTextColor(Color.argb(50, 255, 233, 255));
+                }
+            }else{
+                buttonMachanicRegister.setEnabled(false);
+                buttonMachanicRegister.setTextColor(Color.argb(50, 255, 233, 255));
+            }
+        }else{
+            buttonMachanicRegister.setEnabled(false);
+            buttonMachanicRegister.setTextColor(Color.argb(50,255,233,255));
+        }
+
     }
 }

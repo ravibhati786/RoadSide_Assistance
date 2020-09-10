@@ -141,13 +141,14 @@
                     android:text="Already Have Account?"
                     android:textSize="16sp"/>
                 <TextView
+                    android:id="@+id/textviewLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" Login"
                     android:textStyle="bold"
                     android:textColor="@color/green"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="login"
+                   />/ android:onClick="login"
                     android:textSize="16sp"/>
             </LinearLayout>
 

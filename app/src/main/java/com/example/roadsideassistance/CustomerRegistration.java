@@ -3,31 +3,142 @@ package com.example.roadsideassistance;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class CustomerRegistration extends AppCompatActivity {
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class CustomerRegistration extends AppCompatActivity implements View.OnClickListener {
 
 
     ImageView top_curve;
-    EditText name, email, password,mobnumber;
+    private EditText name, email, password, mobnumber;
+    private Button buttonUserRegister;
+    private ProgressDialog progressDialog;
+    private String emailPattern =  "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    private String mobilePattern = "[0-9]{10}";
     TextView name_text, email_text, password_text,mobile_text , login_title;
     TextView logo;
     LinearLayout already_have_account_layout;
     CardView register_card;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_registration);
+
+        //*programming code
+        name = (EditText)findViewById(R.id.name);
+        email = (EditText)findViewById(R.id.email);
+        password = (EditText)findViewById(R.id.password);
+        mobnumber = (EditText)findViewById(R.id.mobnumber);
+
+        buttonUserRegister = (Button)findViewById(R.id.register_button);
+
+        progressDialog = new ProgressDialog(this);
+
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mobnumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        buttonUserRegister.setOnClickListener(this);
+
+
+        //*
+
+
+
+
 
 
         top_curve = findViewById(R.id.top_curve);
@@ -89,6 +200,100 @@ public class CustomerRegistration extends AppCompatActivity {
         },5000);
 
         startActivity(new Intent(this,OtpVerification.class));
+
+    }
+
+    private void registerUser() {
+
+        final String user_Name = name.getText().toString().trim();
+        final String user_Email = email.getText().toString().trim();
+        final String user_Password = password.getText().toString().trim();
+        final String user_MobileNumber = mobnumber.getText().toString().trim();
+
+        progressDialog.setMessage("Registering user.....");
+        progressDialog.show();
+        buttonUserRegister.setEnabled(false);
+        buttonUserRegister.setTextColor(Color.argb(50,255,233,255));
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_REGISTER,
+                new Response.Listener<String>() {
+                    @Override
+                    //if there will not be any error this method     executed
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    //for the error this method will be executed
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.hide();
+                        buttonUserRegister.setEnabled(true);
+                        buttonUserRegister.setTextColor(Color.rgb(255,255,255));
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        )//here we are override a method
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("UserName",user_Name);
+                params.put("UserEmail",user_Email);
+                params.put("UserPassword",user_Password);
+                params.put("UserMobile",user_MobileNumber);
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+    }
+    //
+    @Override
+    public void onClick(View view) {
+        if(view == buttonUserRegister) {
+            checkEmailAndMobile();
+
+        }
+    }
+    private void checkEmailAndMobile(){
+        if(email.getText().toString().matches(emailPattern)){
+            if(mobnumber.getText().toString().matches((mobilePattern))){
+                registerUser();
+            }else {
+                mobnumber.setError("Invalid Mobile number");
+            }
+        }else{
+            email.setError("Invalid Email");
+        }
+    }
+    private void checkInputs(){
+        if(!TextUtils.isEmpty(name.getText())){
+            if(!TextUtils.isEmpty(email.getText())){
+                if(!TextUtils.isEmpty(password.getText()) && password.length() >= 8 ){
+                    if(!TextUtils.isEmpty(mobnumber.getText())){
+                            buttonUserRegister.setEnabled(true);
+                            buttonUserRegister.setTextColor(Color.rgb(255,255,255));
+                    }else{
+                        buttonUserRegister.setEnabled(false);
+                        buttonUserRegister.setTextColor(Color.argb(50,255,233,255));
+                    }
+                }else{
+                    buttonUserRegister.setEnabled(false);
+                    buttonUserRegister.setTextColor(Color.argb(50,255,233,255));
+                }
+            }else{
+                buttonUserRegister.setEnabled(false);
+                buttonUserRegister.setTextColor(Color.argb(50,255,233,255));
+            }
+        }else{
+                buttonUserRegister.setEnabled(false);
+                buttonUserRegister.setTextColor(Color.argb(50,255,233,255));
+        }
 
     }
 }
