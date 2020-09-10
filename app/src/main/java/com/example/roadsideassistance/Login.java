@@ -38,6 +38,8 @@ public class Login extends AppCompatActivity {
         login_card = findViewById(R.id.login_card);
 
 
+
+
         Animation top_curve_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.top_down);
         top_curve.startAnimation(top_curve_anim);
 
@@ -77,7 +79,7 @@ public void loginbtn(View view){
         }
     },5000);
 
-    startActivity(new Intent(this, CustomerMapActivity.class));
+    startActivity(new Intent(this, MainActivity.class));
 }
 
     public void register(View view) {
