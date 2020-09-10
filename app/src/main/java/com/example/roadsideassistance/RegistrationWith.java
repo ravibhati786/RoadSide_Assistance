@@ -13,10 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class RegistrationWith extends AppCompatActivity {
+public class RegistrationWith extends AppCompatActivity implements View.OnClickListener {
 
     ImageView top_curve;
-    TextView logo,login_title;
+    TextView logo,login_title,textviewLogin;
     LinearLayout new_user_layout,already_have_account_text;
     CardView login_card,login_card1 ;
 
@@ -24,6 +24,11 @@ public class RegistrationWith extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_with);
+
+        textviewLogin = (TextView) findViewById(R.id.textviewLogin);
+
+        //add listner to this textview
+        textviewLogin.setOnClickListener(this);
 
 
         top_curve = findViewById(R.id.top_curve);
@@ -85,10 +90,15 @@ public class RegistrationWith extends AppCompatActivity {
     }
 
 
-    public void login (View view){
+    //public void login (View view){
 
-        startActivity( new Intent(this,Login.class));
+      //  startActivity( new Intent(this,Login.class));
+    //}
+
+    @Override
+    public void onClick(View view) {
+       if(view == textviewLogin)
+           startActivity(new Intent(this,Login.class));
     }
-
 }
 
