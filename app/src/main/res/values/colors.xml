@@ -10,4 +10,5 @@
     <color name="black">#26282B</color>
     <color name="grey1">#4f4f4f</color>
     <color name="orange">#F4511E</color>
+    <color name="lightthemecolor">#ffc324</color>
 </resources>
