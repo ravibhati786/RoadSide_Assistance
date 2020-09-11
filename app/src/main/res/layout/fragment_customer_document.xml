@@ -7,7 +7,7 @@
     tools:context=".CustomerDocumentFragment"
     android:background="@color/white">
 
-
+<!--
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
@@ -32,7 +32,19 @@
             android:text="Create"/>
 
     </androidx.cardview.widget.CardView>
+-->
 
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fabbtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginRight="0dp"
+    android:layout_margin="20dp"
+    android:src="@drawable/ic_baseline_add_24"/>
 
-
+    
+    
 </RelativeLayout>
