@@ -34,6 +34,13 @@
     </androidx.cardview.widget.CardView>
 -->
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add All document 0ne by one"
+        android:layout_centerInParent="true"/>
+
+
 <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/fabbtn"
     android:layout_width="wrap_content"
