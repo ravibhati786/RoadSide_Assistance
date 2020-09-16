@@ -38,12 +38,14 @@ public class SharedPrefManager {
         editor.putString(KEY_USER_EMAIL, email);
         editor.putString(KEY_USER_NAME, username);
 
-
         editor.apply();
 
         return true;
 
     }
+
+
+
     public boolean isLoggedIn(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         if(sharedPreferences.getString(KEY_USER_NAME, null) !=null){

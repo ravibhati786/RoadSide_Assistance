@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.JB-Dev:progress-bar:1.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c2753699dee4c299d31a4c437f00a39a/jetified-progress-bar-1.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c2753699dee4c299d31a4c437f00a39a/jetified-progress-bar-1.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c2753699dee4c299d31a4c437f00a39a/jetified-progress-bar-1.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/69bf807f31c4eaa8ba22f0dd3acf5d1b/jetified-progress-bar-1.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/69bf807f31c4eaa8ba22f0dd3acf5d1b/jetified-progress-bar-1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/69bf807f31c4eaa8ba22f0dd3acf5d1b/jetified-progress-bar-1.0/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

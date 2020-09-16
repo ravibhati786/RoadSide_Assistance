@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "355934527829",
+    "firebase_url": "https://roadside-assistance-d8921.firebaseio.com",
+    "project_id": "roadside-assistance-d8921",
+    "storage_bucket": "roadside-assistance-d8921.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355934527829:android:1f10748c54895425a88fdc",
+        "android_client_info": {
+          "package_name": "com.example.roadsideassistance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355934527829-vcir6tic1v99lhp4nusvd4jbheb285us.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.roadsideassistance",
+            "certificate_hash": "b02269274f623ac719264940ae8bc4c904791df3"
+          }
+        },
+        {
+          "client_id": "355934527829-qaap28ma1felabds8rnj8b85rb18t59l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2cWU1rRwdw2gVKiBdJjLY8fGj9B_Sf_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355934527829-qaap28ma1felabds8rnj8b85rb18t59l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

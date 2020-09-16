@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +45,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     TextView logo;
     LinearLayout new_user_layout;
     CardView login_card;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,12 +145,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                                 objData.getInt("UserId"),
                                                 objData.getString("UserName"),
                                                 objData.getString("UserEmail")
-
                                         );
                                     }
                                     else
                                     {
                                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(
+
                                                 objData.getInt("UserId"),
                                                 objData.getString("UserName"),
                                                 objData.getString("UserEmail")
