@@ -46,7 +46,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     LinearLayout new_user_layout;
     CardView login_card;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +128,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         final String user_Password = editTextpassword.getText().toString().trim();
 
 
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.URL_LOGIN,new Response.Listener<String>()
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.URL_LOGIN,new Response.Listener<String>()
         {
                     @Override
                     public void onResponse(String response) {
@@ -227,6 +226,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             login_button.setTextColor(Color.argb(50,255,233,255));
         }
     }
+    public void ForgotPassword(View view){
+        startActivity(new Intent(this,ForgotPassword.class));
+    }
+
 
     @Override
     public void onClick(View view) {
