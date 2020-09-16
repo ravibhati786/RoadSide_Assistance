@@ -17,6 +17,7 @@ public class SharedPrefManager {
     private static final String KEY_USER_ID = "userid";
 
 
+
     private SharedPrefManager(Context context) {
         ctx = context;
     }
@@ -36,6 +37,7 @@ public class SharedPrefManager {
         editor.putInt(KEY_USER_ID, id);
         editor.putString(KEY_USER_EMAIL, email);
         editor.putString(KEY_USER_NAME, username);
+
 
         editor.apply();
 

@@ -189,8 +189,7 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
 
         progressDialog.setMessage("Registering Mechanic.....");
         progressDialog.show();
-        buttonMachanicRegister.setEnabled(false);
-        buttonMachanicRegister.setTextColor(Color.argb(50,255,233,255));
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_MECHANIC_REGISTER,
                 new Response.Listener<String>() {
                     @Override
@@ -199,7 +198,14 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
                         progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                            if(jsonObject.getBoolean("Success"))
+                            {
+                                Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                                //Intent intent = new Intent(this,)
+                            }
+                            else{
+                                Toast.makeText(MechanicRegistration.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

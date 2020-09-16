@@ -212,8 +212,7 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
 
         progressDialog.setMessage("Registering user.....");
         progressDialog.show();
-        buttonUserRegister.setEnabled(false);
-        buttonUserRegister.setTextColor(Color.argb(50,255,233,255));
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_REGISTER,
                 new Response.Listener<String>() {
                     @Override
@@ -222,7 +221,15 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
                         progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                            if(jsonObject.getBoolean("Success"))
+                            {
+                                Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                                //Intent intent = new Intent(this,)
+                            }
+                            else{
+                                Toast.makeText(CustomerRegistration.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -252,6 +259,7 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
         };
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
+
     //
     @Override
     public void onClick(View view) {
@@ -264,6 +272,7 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
         if(email.getText().toString().matches(emailPattern)){
             if(mobnumber.getText().toString().matches((mobilePattern))){
                 registerUser();
+                
             }else {
                 mobnumber.setError("Invalid Mobile number");
             }
