@@ -59,9 +59,6 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_REQUEST_CODE);
-        }
 
 
 
@@ -91,7 +88,7 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
 
 
 
-   
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

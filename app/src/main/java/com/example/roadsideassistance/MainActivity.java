@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity  {
     public void loadfragement(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentLayout,fragment).commit();
+        fragmentTransaction.replace(R.id.fragmentLayout,fragment).addToBackStack(null).commit();
         drawerLayout.closeDrawer(GravityCompat.START);
         fragmentTransaction.addToBackStack(null);
     }
