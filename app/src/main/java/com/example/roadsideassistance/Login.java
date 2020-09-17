@@ -5,8 +5,12 @@ import androidx.cardview.widget.CardView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +36,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements View.OnClickListener {
 
     ImageView top_curve;
     EditText editTextemail,editTextpassword;
@@ -56,6 +61,39 @@ public class Login extends AppCompatActivity {
         new_user_layout = findViewById(R.id.new_user_text);
         login_card = findViewById(R.id.login_card);
 
+        editTextemail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        editTextpassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        login_button.setOnClickListener(this);
 
 
 
@@ -81,12 +119,11 @@ public class Login extends AppCompatActivity {
 
 
 
-
     }
 
 
 
-    public void userLogin(){
+    public void login(){
         final String user_Email = editTextemail.getText().toString().trim();
         final String user_Password = editTextpassword.getText().toString().trim();
 
@@ -101,12 +138,27 @@ public class Login extends AppCompatActivity {
 
                             if(obj.getBoolean("Success")){
                                     JSONObject objData = obj.getJSONObject("Data");
-                                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(
-                                    objData.getInt("UserId"),
-                                    objData.getString("UserName"),
-                                    objData.getString("UserEmail")
+                                    if((objData.getString("UserTable")).equals("UserMaster"))
+                                    {
+                                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(
+                                                objData.getInt("UserId"),
+                                                objData.getString("UserName"),
+                                                objData.getString("UserEmail")
                                         );
-                                Toast.makeText(getApplicationContext(),"User login successful",Toast.LENGTH_LONG).show();
+                                    }
+                                    else
+                                    {
+                                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(
+
+                                                objData.getInt("UserId"),
+                                                objData.getString("UserName"),
+                                                objData.getString("UserEmail")
+                                        );
+                                    }
+                                    Intent loginIntent = new Intent(Login.this,MainActivity.class);
+                                    startActivity(loginIntent);
+                                    finish();
+                                    //Toast.makeText(getApplicationContext(),"User login successful",Toast.LENGTH_LONG).show();
                             }else{
                                 Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG).show();
                             }
@@ -140,7 +192,7 @@ public class Login extends AppCompatActivity {
     public void loginbtn(View view){
 
         final LoadingDialog loadingDialog = new LoadingDialog(Login.this);
-        userLogin();
+        login();
         loadingDialog.startLoadingDialog();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -159,10 +211,31 @@ public class Login extends AppCompatActivity {
         startActivity(new Intent(this,RegistrationWith.class));
     }
 
+    public void checkInputs()
+    {
+        if(!TextUtils.isEmpty(editTextemail.getText())){
+            if(!TextUtils.isEmpty((editTextpassword.getText()))){
+                login_button.setEnabled(true);
+                login_button.setTextColor(Color.rgb(255,255,255));
+            }else{
+                login_button.setEnabled(false);
+                login_button.setTextColor(Color.argb(50,255,233,255));
+            }
+        }else{
+            login_button.setEnabled(false);
+            login_button.setTextColor(Color.argb(50,255,233,255));
+        }
+    }
     public void ForgotPassword(View view){
         startActivity(new Intent(this,ForgotPassword.class));
     }
 
 
+    @Override
+    public void onClick(View view) {
+        if(view == login_button)
+            login();
+
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.roadsideassistance;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -29,6 +30,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,13 +56,14 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
     TextView logo;
     LinearLayout already_have_account_layout;
     CardView register_card;
-
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_registration);
 
+        mAuth = FirebaseAuth.getInstance();
         //*programming code
         name = (EditText)findViewById(R.id.name);
         email = (EditText)findViewById(R.id.email);
@@ -212,8 +220,7 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
 
         progressDialog.setMessage("Registering user.....");
         progressDialog.show();
-        buttonUserRegister.setEnabled(false);
-        buttonUserRegister.setTextColor(Color.argb(50,255,233,255));
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_REGISTER,
                 new Response.Listener<String>() {
                     @Override
@@ -222,7 +229,30 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
                         progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                            if(jsonObject.getBoolean("Success"))
+                            {
+                                Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                                //Intent intent = new Intent(this,)
+                                mAuth.createUserWithEmailAndPassword(user_Email, user_Password)
+                                        .addOnCompleteListener(CustomerRegistration.this, new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Toast.makeText(CustomerRegistration.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
+
+                                                } else {
+                                                    String uid = mAuth.getCurrentUser().getUid();
+                                                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(uid);
+                                                    Log.i("check",current_user_db.toString());
+                                                    current_user_db.setValue(true);
+                                                }
+                                            }
+                                        });
+                            }
+                            else{
+                                Toast.makeText(CustomerRegistration.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -252,6 +282,7 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
         };
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
+
     //
     @Override
     public void onClick(View view) {
@@ -264,6 +295,7 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
         if(email.getText().toString().matches(emailPattern)){
             if(mobnumber.getText().toString().matches((mobilePattern))){
                 registerUser();
+                
             }else {
                 mobnumber.setError("Invalid Mobile number");
             }

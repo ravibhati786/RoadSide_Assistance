@@ -17,6 +17,7 @@ public class SharedPrefManager {
     private static final String KEY_USER_ID = "userid";
 
 
+
     private SharedPrefManager(Context context) {
         ctx = context;
     }
@@ -42,6 +43,9 @@ public class SharedPrefManager {
         return true;
 
     }
+
+
+
     public boolean isLoggedIn(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         if(sharedPreferences.getString(KEY_USER_NAME, null) !=null){

@@ -1,5 +1,6 @@
 package com.example.roadsideassistance;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,6 +27,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,12 +54,14 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
     LinearLayout new_user;
     //LinearLayout already_have_account_layout;
     CardView register_card;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mechanic_registration);
 
+        mAuth = FirebaseAuth.getInstance();
         top_curve = findViewById(R.id.top_curve);
         name = findViewById(R.id.name);
         name_text = findViewById(R.id.name_text);
@@ -189,8 +200,7 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
 
         progressDialog.setMessage("Registering Mechanic.....");
         progressDialog.show();
-        buttonMachanicRegister.setEnabled(false);
-        buttonMachanicRegister.setTextColor(Color.argb(50,255,233,255));
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_MECHANIC_REGISTER,
                 new Response.Listener<String>() {
                     @Override
@@ -199,7 +209,30 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
                         progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                            if(jsonObject.getBoolean("Success"))
+                            {
+                                Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG).show();
+                                //Intent intent = new Intent(this,)
+
+                                mAuth.createUserWithEmailAndPassword(mechanic_email, mechanic_password)
+                                        .addOnCompleteListener(MechanicRegistration.this, new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Toast.makeText(MechanicRegistration.this, "Registration Failed!", Toast.LENGTH_SHORT).show();
+
+                                                } else {
+                                                    String uid = mAuth.getCurrentUser().getUid();
+                                                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Mechanics").child(uid);
+                                                    current_user_db.setValue(true);
+
+                                                }
+                                            }
+                                        });
+                            }
+                            else{
+                                Toast.makeText(MechanicRegistration.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -278,4 +311,6 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
         }
 
     }
+
+
 }
