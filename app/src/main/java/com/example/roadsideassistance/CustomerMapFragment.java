@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,7 +61,19 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
         mapFragment.getMapAsync(this);
 
 
+        Button requestbtn1 = v.findViewById(R.id.requestbtn);
 
+
+        requestbtn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentLayout,new RequestMechanicFragment());
+                fragmentTransaction.addToBackStack(null).commit();
+
+            }
+        });
 
 
         Button requestbtn = v.findViewById(R.id.newservicerequest);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.roadsideassistance" >
+    package="com.example.roadsideassistance">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -28,9 +28,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".Login" >
-        </activity>
+        android:theme="@style/AppTheme">
+        <activity android:name=".MechanicVehicleActivity"></activity>
+        <activity android:name=".MechanicDocumentActivity" />
+        <activity android:name=".Login" />
         <activity android:name=".ForgotPassword" />
 
         <meta-data
@@ -45,7 +46,7 @@
         <activity android:name=".MechanicRegistration" />
         <activity android:name=".RegistrationWith" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".MechanicDashboard" >
+        <activity android:name=".MechanicDashboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -40,7 +40,13 @@ GridLayout mechanicDashboardGrid;
                         case 0 :Intent intent =  new Intent(MechanicDashboard.this,MechanicMapActivity.class);
                                 startActivity(intent);
                                 break;
-                        
+                        case 2 :Intent intent2 =  new Intent(MechanicDashboard.this,MechanicDocumentActivity.class);
+                            startActivity(intent2);
+                            break;
+
+                        case 4 :Intent intent4 =  new Intent(MechanicDashboard.this,MechanicVehicleActivity.class);
+                            startActivity(intent4);
+                            break;
                     }
 
                 }
