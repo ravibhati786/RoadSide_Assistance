@@ -2,7 +2,7 @@ package com.example.roadsideassistance;
 
 public class Constants {
 
-    private static final String ROOT_URL ="https://bea4c700a019.ngrok.io/RoadSideAssistanceDB/V1/";
+    private static final String ROOT_URL ="https://1077073b297d.ngrok.io/RoadSideAssistanceDB/V1/";
     public static final String URL_REGISTER = ROOT_URL+"Register/registrationUser.php";
     public static final String URL_LOGIN = ROOT_URL+"Login/fetch_Result.php";
     public static final String URL_MECHANIC_REGISTER = ROOT_URL+"Register/registrationMechanic.php";

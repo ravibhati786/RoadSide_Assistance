@@ -188,8 +188,8 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
         
 
     }
-
-    public void login(View view) {
+    //---onCreate method close---
+     public void login(View view) {
         finish();
     }
     public void registerButton(View view) {
@@ -243,8 +243,15 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
                                                 } else {
                                                     String uid = mAuth.getCurrentUser().getUid();
                                                     DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(uid);
+
                                                     Log.i("check",current_user_db.toString());
                                                     current_user_db.setValue(true);
+                                                    Map customerInfo = new HashMap();
+                                                    customerInfo.put("name",user_Name);
+                                                    customerInfo.put("email",user_Email);
+                                                    customerInfo.put("phone",user_MobileNumber);
+                                                    current_user_db.updateChildren(customerInfo);
+                                                    finish();
                                                 }
                                             }
                                         });
@@ -281,7 +288,9 @@ public class CustomerRegistration extends AppCompatActivity implements View.OnCl
             }
         };
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+
     }
+
 
     //
     @Override
