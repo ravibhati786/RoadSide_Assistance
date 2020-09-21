@@ -1,7 +1,6 @@
 package com.example.roadsideassistance;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -15,46 +14,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.firebase.geofire.GeoFire;
-import com.firebase.geofire.GeoLocation;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BottomSheet extends BottomSheetDialogFragment {
 
-    private LatLng pickupLocation;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.bottom_sheet_diolog,container,false);
 
-        Button requestbtn = v.findViewById(R.id.bottmsheetrequestbtn);
+        Button requestbtn = v.findViewById(R.id.requestbtn);
 
 
         requestbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String uid = FirebaseAuth.getInstance().getUid();
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("customerRequests");
-                GeoFire geoFire = new GeoFire(ref);
-                Bundle mArgs = getArguments();
-                Location mlastLocation = mArgs.getParcelable("mlastlocation");
-                geoFire.setLocation(uid, new GeoLocation(mlastLocation.getLatitude(), mlastLocation.getLongitude()));
-
-                pickupLocation = new LatLng(mlastLocation.getLatitude(), mlastLocation.getLongitude());
-
-
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentLayout,new RequestMechanicFragment());
                 fragmentTransaction.addToBackStack(null).commit();
                 dismiss();
-
             }
         });
 
