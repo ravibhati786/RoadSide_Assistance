@@ -35,9 +35,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentLayout,new RequestMechanicFragment());
                 fragmentTransaction.addToBackStack(null).commit();
-
-
-dismiss();
+                dismiss();
             }
         });
 
