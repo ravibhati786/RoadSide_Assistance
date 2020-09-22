@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CompleteServiceDetails">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Service Complete Details"
+            android:textSize="25dp"
+            android:layout_gravity="center"/>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle name "
+            android:paddingBottom="10dp"
+            android:text="Customer name"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext1"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle name "
+            android:paddingBottom="10dp"
+            android:text="Lokesh Kumar"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_MvehicleName"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="Mechanic name"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext3"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ramesh kumar"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_MvehicleModel"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle name "
+            android:paddingBottom="10dp"
+            android:text="Service Complete Location"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext2"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle number"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:text="Sheoganj"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_MvehicleNumber"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:text="Mechanic Contact"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_Mvehicle"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="9089786750"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext5"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:text="Payment"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="250 "
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext4"/>
+
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/upload_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/green"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="5dp"
+            android:padding="16dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="visible"
+            >
+
+            <Button
+                android:id="@+id/uploadbtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_white"
+                android:ems="15"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"/>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</RelativeLayout>
