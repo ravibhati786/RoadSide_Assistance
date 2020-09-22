@@ -26,9 +26,10 @@
 
 
         <TextView
+            android:id="@+id/customernamelogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lokesh Kumar"
+
             android:fontFamily="sans-serif"
             android:layout_marginTop="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>

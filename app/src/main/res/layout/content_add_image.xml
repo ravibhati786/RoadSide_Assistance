@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".CustomerDocumentFragment">
+    >
 
 
    <!-- <ImageView
@@ -83,7 +82,7 @@
             >
 
             <Button
-                android:id="@+id/uploadbtn"
+                android:id="@+id/savedocumentbtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ripple_white"
@@ -95,7 +94,10 @@
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-light"/>
         </androidx.cardview.widget.CardView>
-
+    <TextView
+        android:id="@+id/selectedItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     </LinearLayout>
 
 

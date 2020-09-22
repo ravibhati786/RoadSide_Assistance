@@ -2,63 +2,78 @@ package com.example.roadsideassistance;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CustomerVehicleFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+
 public class CustomerVehicleFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    FloatingActionButton btnfab;
+    AlertDialog dialog;
+    ListView listView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    String[] VehicleName = {"Scooty"};
+    String[] VehicleNumber = {"RJ24AB1208"};
+    String[] VehicleModel ={"Honda Activa 6G"};
+    String[] VehicleMake = {"Make"};
 
-    public CustomerVehicleFragment() {
-        // Required empty public constructor
-    }
+    Integer[] VehicleImage =  {R.drawable.profileimg};
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CustomerVehicleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CustomerVehicleFragment newInstance(String param1, String param2) {
-        CustomerVehicleFragment fragment = new CustomerVehicleFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customer_vehicle, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_customer_vehicle, container, false);
+
+
+
+        FloatingActionButton btnfab = v.findViewById(R.id.mechvehiclefabbtn);
+        btnfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getContext(), "Relace with your own action", Toast.LENGTH_SHORT).show();
+
+                UploadVehicleMechanic();
+            }
+        });
+
+        listView = v.findViewById(R.id.custvehiclelistview);
+
+        AdapterMechanicVehicleListView adapter = new AdapterMechanicVehicleListView(getActivity(),VehicleName,VehicleNumber,VehicleModel,VehicleMake,VehicleImage);
+        listView.setAdapter(adapter);
+
+
+
+
+   return v;
     }
+
+    private void UploadVehicleMechanic() {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        View mview = getLayoutInflater().inflate(R.layout.custome_mechanic_vehicle_add,null);
+
+        // Spinner mspinner = mview.findViewById(R.id.spinnerdoctype);
+        //String[] value = {"Select document type","Pan Card","Adhar Card"," Driving Licence","Registration Certificate(RC)"};
+        //ArrayList<String> arrayList = new  ArrayList<>(Arrays.asList(value));
+        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,R.layout.style_spinner,arrayList);
+        // mspinner.setAdapter(arrayAdapter);
+
+        mBuilder.setView(mview);
+        dialog = mBuilder.create();
+        dialog.show();
+
+
+
+    }
+
+
+
 }

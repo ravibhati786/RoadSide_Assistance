@@ -25,19 +25,19 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
         View v = inflater.inflate(R.layout.bottom_sheet_diolog,container,false);
 
-        Button requestbtn = v.findViewById(R.id.requestbtn);
+       // Button requestbtn = v.findViewById(R.id.requestbt);
 
 
-        requestbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        //requestbtn.setOnClickListener(new View.OnClickListener() {
+          //  @Override
+            //public void onClick(View view) {
 
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentLayout,new RequestMechanicFragment());
-                fragmentTransaction.addToBackStack(null).commit();
-                dismiss();
-            }
-        });
+              //  FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                //fragmentTransaction.replace(R.id.fragmentLayout,new RequestMechanicFragment());
+               // fragmentTransaction.addToBackStack(null).commit();
+               // dismiss();
+           // }
+       // });
 
         Spinner spinnerservice = v.findViewById(R.id.spinnerservicerquest);
         String[] value = {"Select service","Towing service","Accidental towing","Battery Jumpstart","Flat tire","Minor on-site repair","Lost or locked key","Fuel problem","Medical coordination.","24x7 roadside assistance","Taxi services"};

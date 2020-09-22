@@ -27,9 +27,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.PermissionRequest;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,14 +50,24 @@ public class CustomerDocumentFragment extends Fragment {
     private static final int PERMISSIOM_REQUEST =1 ;
     private static final int REQUEST_GALLERY = 200;
     ImageView ivImage;
-    TextView filename;
+    EditText documentName;
+    TextView filename, selectedItem;
     Button uploaduImage;
     String file_path = null;
-Integer REQUEST_CAMERA = 1,SELECT_FILE = 0;
-CardView uplloadcard;
-Button uploadbtn;
-FloatingActionButton btnfab;
-AlertDialog dialog;
+    Integer REQUEST_CAMERA = 1,SELECT_FILE = 0;
+    CardView uplloadcard;
+    Button uploadbtn,savedocumentbtn;
+    FloatingActionButton btnfab;
+    AlertDialog dialog;
+    ListView listView;
+    File file;
+    Spinner  mspinner;
+    String[] DocumentName = {"Pan card"};
+    String[] DocumentNumber = {"TY123T45"};
+    Integer[] DocumentImage  = {R.drawable.profileimg};
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,9 +93,15 @@ AlertDialog dialog;
             }
         });
 
-        //CardView cardView = v.findViewById(R.id.cvcustomermap);
-        //Button button = v.findViewById(R.id.newservicerequest);
-       // button.setVisibility(v.INVISIBLE);
+        listView = v.findViewById(R.id.custvehiclelistview);
+
+        AdapterCustomerDocumentListView adapter = new AdapterCustomerDocumentListView(getActivity(),DocumentName,DocumentNumber,DocumentImage);
+        listView.setAdapter(adapter);
+
+
+
+
+
         return v;
     }
 
@@ -90,12 +109,48 @@ AlertDialog dialog;
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
         View mview = getLayoutInflater().inflate(R.layout.content_add_image,null);
+        selectedItem = mview.findViewById(R.id.selectedItem);
 
-        Spinner mspinner = mview.findViewById(R.id.spinnerdoctype);
+        documentName = mview.findViewById(R.id.edittext_docnumber);
+        mspinner = mview.findViewById(R.id.spinnerdoctype);
         String[] value = {"Select document type","Pan Card","Adhar Card"," Driving Licence","Registration Certificate(RC)"};
         ArrayList<String> arrayList = new  ArrayList<>(Arrays.asList(value));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),R.layout.style_spinner,arrayList);
         mspinner.setAdapter(arrayAdapter);
+
+        mspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(adapterView.getItemAtPosition(i).equals("Select document"))
+                {
+                    Toast.makeText(getContext(), "Please select document", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                     selectedItem.setText(adapterView.getSelectedItem().toString());
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            ///
+            }
+        });
+
+        mview.findViewById(R.id.savedocumentbtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
+
+
+
+
+            }
+        });
+
 
         mBuilder.setView(mview);
          dialog = mBuilder.create();
@@ -121,6 +176,8 @@ AlertDialog dialog;
 
     }
 
+
+
     private void filepicker() {
         Toast.makeText(getContext(), "File Picker Call", Toast.LENGTH_SHORT).show();
 
@@ -140,7 +197,7 @@ AlertDialog dialog;
           Log.d("File path :"," "+filePath);
 
           this.file_path = filePath;
-          File file = new File(filePath);
+           file = new File(filePath);
           filename.setText(file.getName());
       }
 

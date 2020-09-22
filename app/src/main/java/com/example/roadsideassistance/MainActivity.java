@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity  {
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     Fragment fragment = null;
-
+    TextView name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +41,17 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-        NavigationView navigationView = findViewById(R.id.navigationview);
+        navigationView = findViewById(R.id.navigationview);
         navigationView.setItemIconTintList(null);
         drawerLayout = findViewById(R.id.drawer);
 
 
+
+      //  View navview = getLayoutInflater().inflate(R.layout.nav_header,null);
+
+
+        // name = navview.findViewById(R.id.customernamelogin);
+        //name.setText("dngdfjhgjdfhgjhs");
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -75,6 +82,9 @@ public class MainActivity extends AppCompatActivity  {
                         loadfragement(fragment);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
+                    case R.id.navlogout:
+
+
 
                 }
 
