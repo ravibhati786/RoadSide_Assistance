@@ -27,35 +27,32 @@ public class CustomerVehicleFragment extends Fragment {
     Integer[] VehicleImage =  {R.drawable.profileimg};
 
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_customer_vehicle, container, false);
 
-
-
-        FloatingActionButton btnfab = v.findViewById(R.id.mechvehiclefabbtn);
+        FloatingActionButton btnfab = v.findViewById(R.id.custvehiclefabbtn);
         btnfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(getContext(), "Relace with your own action", Toast.LENGTH_SHORT).show();
 
-                UploadVehicleMechanic();
+                UploadVehicleCustomer();
             }
         });
 
-        listView = v.findViewById(R.id.custvehiclelistview);
+        listView = v.findViewById(R.id.mechvehiclelistview);
 
         AdapterMechanicVehicleListView adapter = new AdapterMechanicVehicleListView(getActivity(),VehicleName,VehicleNumber,VehicleModel,VehicleMake,VehicleImage);
         listView.setAdapter(adapter);
 
 
-
-
-   return v;
+    return v;
     }
 
-    private void UploadVehicleMechanic() {
+    private void UploadVehicleCustomer() {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
         View mview = getLayoutInflater().inflate(R.layout.custome_mechanic_vehicle_add,null);
@@ -73,7 +70,4 @@ public class CustomerVehicleFragment extends Fragment {
 
 
     }
-
-
-
 }

@@ -5,16 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".CustomerVehicleFragment">
 
-
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
-
 
         <ListView
             android:id="@+id/custvehiclelistview"
@@ -22,23 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-
-
-
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Add All Vehicle 0ne by one"
+        android:hint="Add All Vehicle one by one"
         android:textSize="18dp"
         android:layout_gravity="center"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/mechvehiclefabbtn"
+        android:id="@+id/custvehiclefabbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
         android:src="@drawable/ic_baseline_add_24"/>
-
 </FrameLayout>
