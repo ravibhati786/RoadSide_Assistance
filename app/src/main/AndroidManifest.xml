@@ -29,9 +29,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MechanicVehicleActivity"></activity>
+        <activity android:name=".CompleteServiceDetails"></activity>
+        <activity android:name=".MechanicVehicleActivity" />
         <activity android:name=".MechanicDocumentActivity" />
-        <activity android:name=".Login" />
+        <activity android:name=".MechanicDashboard" />
         <activity android:name=".ForgotPassword" />
 
         <meta-data
@@ -45,8 +46,8 @@
         <activity android:name=".CustomerRegistration" />
         <activity android:name=".MechanicRegistration" />
         <activity android:name=".RegistrationWith" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MechanicDashboard">
+        <activity android:name=".Login" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
