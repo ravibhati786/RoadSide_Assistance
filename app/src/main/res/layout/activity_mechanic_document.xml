@@ -15,10 +15,29 @@
         android:background="@color/green"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+        <ListView
+            android:id="@+id/Mechaniclistview"
+            android:layout_below="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add All document 0ne by one"
+        android:id="@+id/txtMessage"
         android:layout_centerInParent="true"/>
 
 

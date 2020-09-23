@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity  {
         drawerLayout = findViewById(R.id.drawer);
 
 
-
+        updateNavHeader();
       //  View navview = getLayoutInflater().inflate(R.layout.nav_header,null);
 
 
@@ -83,9 +85,11 @@ public class MainActivity extends AppCompatActivity  {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.navlogout:
-
-
-
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(MainActivity.this,Login.class);
+                        startActivity(intent);
+                        finish();
+                        break;
                 }
 
                 return true;
@@ -93,6 +97,17 @@ public class MainActivity extends AppCompatActivity  {
         });
 
 
+        }
+
+
+        public void updateNavHeader(){
+
+            navigationView = findViewById(R.id.navigationview);
+            View headerView = navigationView.getHeaderView(0);
+            TextView navusername = headerView.findViewById(R.id.customernamelogin);
+            navusername.setText(new SharedPrefManager(this).getLoggedName());
+            TextView navuseremail = headerView.findViewById(R.id.useremail);
+            navuseremail.setText(new SharedPrefManager(this).getLoggedEmail());
         }
 
 

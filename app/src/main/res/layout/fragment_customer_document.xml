@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:hint="Add All Vehicle 0ne by one"
         android:textSize="18dp"
+        android:id="@+id/txtMessage"
         android:layout_gravity="center"/>
 
 

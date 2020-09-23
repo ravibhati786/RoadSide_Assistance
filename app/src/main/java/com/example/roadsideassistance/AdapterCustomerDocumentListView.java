@@ -1,6 +1,10 @@
 package com.example.roadsideassistance;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,21 +12,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class AdapterCustomerDocumentListView extends ArrayAdapter {
+import com.bumptech.glide.Glide;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
+public class AdapterCustomerDocumentListView extends ArrayAdapter<Document> {
 
 
-    private String[] DocumentName;
-    private String[] DocumentNumber;
-    private Integer[] DocumentImage; // Integer using for Document Image
-    private  Activity context;
+    private List<Document> documentList;
 
-    public AdapterCustomerDocumentListView(Activity context, String[] DocumentName, String[] DocumentNumber,Integer[] DocumentImage){
+    private Context context;
+    public AdapterCustomerDocumentListView(List<Document> documentList, Context context){
 
-        super(context,R.layout.custom_customer_document_listview,DocumentName);
+        super(context,R.layout.custom_customer_document_listview,documentList);
         this.context = context;
-        this.DocumentName = DocumentName;
-        this.DocumentNumber = DocumentNumber;
-        this.DocumentImage = DocumentImage;
+        this.documentList = documentList;
     }
 
 
@@ -33,7 +39,7 @@ public class AdapterCustomerDocumentListView extends ArrayAdapter {
         AdapterCustomerDocumentListView.ViewHolder viewHolder = null;
 
         if(ress == null){
-            LayoutInflater layoutInflater = context.getLayoutInflater();
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
             ress = layoutInflater.inflate(R.layout.custom_customer_document_listview,null,true );
             viewHolder = new AdapterCustomerDocumentListView.ViewHolder(ress);
             ress.setTag(viewHolder);
@@ -42,21 +48,25 @@ public class AdapterCustomerDocumentListView extends ArrayAdapter {
             viewHolder = (AdapterCustomerDocumentListView.ViewHolder) ress.getTag();
         }
 
-        viewHolder.DocumentName.setText(DocumentName[position]);
-        viewHolder.DocumentNumber.setText(DocumentNumber[position]);
-        viewHolder.DocumentImage.setImageResource(DocumentImage[position]);
+        Document document = documentList.get(position);
+
+        viewHolder.DocumentType.setText(document.getDocumentType());
+        viewHolder.DocumentNumber.setText(document.getDocumentNumber());
+        Glide.with(context)
+                .load(document.getDocumentFile())
+                .into(viewHolder.DocumentImage);
 
        return ress;
     }
 
     static class ViewHolder
     {
-        TextView DocumentName;
         TextView DocumentNumber;
+        TextView DocumentType;
         ImageView DocumentImage;
 
         ViewHolder(View v){
-            DocumentName =v.findViewById(R.id.custdocumentName);
+            DocumentType =v.findViewById(R.id.custdocumentName);
             DocumentNumber=v.findViewById(R.id.custdocumentNumber);
             DocumentImage = v.findViewById(R.id.custdocumentImg);
 

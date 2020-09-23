@@ -70,6 +70,53 @@ public class MechanicLogin extends AppCompatActivity {
                         if(!task.isSuccessful()){
                             Toast.makeText(MechanicLogin.this, "Sign In Mechanic Problem", Toast.LENGTH_SHORT).show();
                         }
+                        else {
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.URL_LOGIN,new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+
+                                    try {
+                                        JSONObject obj = new JSONObject(response);
+
+                                        if(obj.getBoolean("Success")){
+                                            JSONObject objData = obj.getJSONObject("Data");
+                                            if(objData.getString("Table").equals("AssistanceMaster")){
+                                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(
+                                                        objData.getInt("AssistantId"),
+                                                        objData.getString("AssistantName"),
+                                                        objData.getString("AssistantEmail")
+                                                );
+                                                Toast.makeText(getApplicationContext(),"User login successful",Toast.LENGTH_LONG).show();
+                                            }
+                                        }else{
+                                            Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+
+                                            Log.i("error",error.toString());
+                                            Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                            ){
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("UserEmail", email);
+                                    params.put("UserPassword",password);
+                                    Log.i("param",params.toString());
+                                    return params;
+                                }
+                            };
+                            RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+                        }
                     }
                 });
             }

@@ -81,6 +81,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                //Log.i("UserValue",user.toString());
                 if(user!=null){
                     final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users");
                     reference.child("Customers").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -125,6 +126,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 
                 }
+
             }
         };
 
@@ -200,6 +202,53 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(!task.isSuccessful()){
                     Toast.makeText(Login.this, "Sing In Error", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.URL_LOGIN,new Response.Listener<String>()
+                    {
+                        @Override
+                        public void onResponse(String response) {
+
+                            try {
+                                JSONObject obj = new JSONObject(response);
+
+                                if(obj.getBoolean("Success")){
+                                    JSONObject objData = obj.getJSONObject("Data");
+                                    if(objData.getString("Table").equals("UserMaster")){
+                                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(
+                                                objData.getInt("UserId"),
+                                                objData.getString("UserName"),
+                                                objData.getString("UserEmail")
+                                        );
+                                        Toast.makeText(getApplicationContext(),"User login successful",Toast.LENGTH_LONG).show();
+                                    }
+                                }else{
+                                    Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    Log.i("error",error.toString());
+                                    Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                            }
+                    ){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("UserEmail", user_Email);
+                            params.put("UserPassword",user_Password);
+                            Log.i("param",params.toString());
+                            return params;
+                        }
+                    };
+                    RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
                 }
             }
         });
