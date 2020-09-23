@@ -3,6 +3,8 @@ package com.example.roadsideassistance;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.core.content.ContextCompat;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -18,7 +20,7 @@ public class SharedPrefManager {
 
 
 
-    private SharedPrefManager(Context context) {
+    SharedPrefManager(Context context) {
         ctx = context;
     }
 
@@ -42,6 +44,21 @@ public class SharedPrefManager {
 
         return true;
 
+    }
+
+    public int getLoggedUserId(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_USER_ID,0);
+    }
+
+    public String getLoggedEmail(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_USER_EMAIL,null);
+    }
+
+    public String getLoggedName(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_USER_NAME,null);
     }
 
 

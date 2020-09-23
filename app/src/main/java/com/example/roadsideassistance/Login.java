@@ -1,5 +1,6 @@
 package com.example.roadsideassistance;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -27,6 +28,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import org.json.JSONException;
@@ -45,6 +56,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     TextView logo;
     LinearLayout new_user_layout;
     CardView login_card;
+    FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +73,62 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         logo = findViewById(R.id.logo);
         new_user_layout = findViewById(R.id.new_user_text);
         login_card = findViewById(R.id.login_card);
+
+        mAuth = FirebaseAuth.getInstance();
+
+
+        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                //Log.i("UserValue",user.toString());
+                if(user!=null){
+                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users");
+                    reference.child("Customers").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.hasChild(user.getUid())){
+                                Intent intent = new Intent(Login.this,MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                                return;
+                            }
+                            else
+                            {
+                                reference.child("Mechanics").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.hasChild(user.getUid())){
+                                            Intent intent = new Intent(Login.this,MechanicDashboard.class);
+                                            startActivity(intent);
+                                            finish();
+                                            return;
+                                        }
+                                        else{
+                                            Toast.makeText(Login.this, "User doesn't exist!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+                }
+
+            }
+        };
 
         editTextemail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -127,65 +196,62 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         final String user_Email = editTextemail.getText().toString().trim();
         final String user_Password = editTextpassword.getText().toString().trim();
 
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.URL_LOGIN,new Response.Listener<String>()
+        mAuth.signInWithEmailAndPassword(user_Email,user_Password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>()
         {
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-                            JSONObject obj = new JSONObject(response);
-
-                            if(obj.getBoolean("Success")){
-                                    JSONObject objData = obj.getJSONObject("Data");
-                                    if((objData.getString("UserTable")).equals("UserMaster"))
-                                    {
-                                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(
-                                                objData.getInt("UserId"),
-                                                objData.getString("UserName"),
-                                                objData.getString("UserEmail")
-                                        );
-                                    }
-                                    else
-                                    {
-                                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(
-
-                                                objData.getInt("UserId"),
-                                                objData.getString("UserName"),
-                                                objData.getString("UserEmail")
-                                        );
-                                    }
-                                    Intent loginIntent = new Intent(Login.this,MainActivity.class);
-                                    startActivity(loginIntent);
-                                    finish();
-                                    //Toast.makeText(getApplicationContext(),"User login successful",Toast.LENGTH_LONG).show();
-                            }else{
-                                Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Log.i("error",error.toString());
-                        Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
-                    }
-                }
-        ){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-              Map<String, String> params = new HashMap<>();
-              params.put("UserEmail", user_Email);
-              params.put("UserPassword",user_Password);
-              Log.i("param",params.toString());
-              return params;
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(!task.isSuccessful()){
+                    Toast.makeText(Login.this, "Sing In Error", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.URL_LOGIN,new Response.Listener<String>()
+                    {
+                        @Override
+                        public void onResponse(String response) {
+
+                            try {
+                                JSONObject obj = new JSONObject(response);
+
+                                if(obj.getBoolean("Success")){
+                                    JSONObject objData = obj.getJSONObject("Data");
+                                    if(objData.getString("Table").equals("UserMaster")){
+                                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(
+                                                objData.getInt("UserId"),
+                                                objData.getString("UserName"),
+                                                objData.getString("UserEmail")
+                                        );
+                                        Toast.makeText(getApplicationContext(),"User login successful",Toast.LENGTH_LONG).show();
+                                    }
+                                }else{
+                                    Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    Log.i("error",error.toString());
+                                    Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                            }
+                    ){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("UserEmail", user_Email);
+                            params.put("UserPassword",user_Password);
+                            Log.i("param",params.toString());
+                            return params;
+                        }
+                    };
+                    RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+                }
             }
-        };
-        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+        });
 
     }
 
@@ -230,12 +296,27 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         startActivity(new Intent(this,ForgotPassword.class));
     }
 
+    public  void MechanicLogin(View view){
+        startActivity(new Intent(this,MechanicLogin.class));
+    }
 
     @Override
     public void onClick(View view) {
         if(view == login_button)
             login();
 
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(firebaseAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuth.removeAuthStateListener(firebaseAuthListener);
+    }
 }

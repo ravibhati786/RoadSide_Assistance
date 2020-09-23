@@ -210,6 +210,16 @@
                     android:textSize="16sp"
                     android:layout_marginTop="20dp"
                     android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="MechanicLogin"
+                    android:text="If you are mechanic then click here"
+                    android:textColor="@color/green"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

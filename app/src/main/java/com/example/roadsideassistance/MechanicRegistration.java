@@ -224,8 +224,16 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
                                                 } else {
                                                     String uid = mAuth.getCurrentUser().getUid();
                                                     DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Mechanics").child(uid);
+                                                    Log.i("check",current_user_db.toString());
                                                     current_user_db.setValue(true);
-
+                                                    Log.i("check",current_user_db.toString());
+                                                    current_user_db.setValue(true);
+                                                    Map customerInfo = new HashMap();
+                                                    customerInfo.put("name",mechanic_Name);
+                                                    customerInfo.put("email",mechanic_email);
+                                                    customerInfo.put("phone",mechanic_MobileNumber);
+                                                    current_user_db.updateChildren(customerInfo);
+                                                    finish();
                                                 }
                                             }
                                         });
@@ -254,8 +262,8 @@ public class MechanicRegistration extends AppCompatActivity implements View.OnCl
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
                 params.put("AssistantName",mechanic_Name);
-                params.put("AssitantShopName",mechanic_ShopName);
-                params.put("AsistantEmail",mechanic_email);
+                params.put("AssistantShopName",mechanic_ShopName);
+                params.put("AssistantEmail",mechanic_email);
                 params.put("AssistantPassword",mechanic_password);
                 params.put("AssistantMobile",mechanic_MobileNumber);
                 return params;
