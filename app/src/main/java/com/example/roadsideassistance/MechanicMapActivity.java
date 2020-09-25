@@ -9,12 +9,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +68,11 @@ public class MechanicMapActivity extends AppCompatActivity implements OnMapReady
     private LinearLayout mCustomerInfo;
     private TextView mCustomerName;
     private TextView mCustomerPhone;
+    private Button btnServiceDetails;
+    String emailCustomer = "";
+    String serviceId = "";
+    String vehicleId = "";
+    LatLng serviceLatLng;
 
 
     @Override
@@ -81,6 +88,7 @@ public class MechanicMapActivity extends AppCompatActivity implements OnMapReady
             ActivityCompat.requestPermissions(MechanicMapActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_REQUEST_CODE);
         }
 
+        btnServiceDetails = findViewById(R.id.btnServiceDetails);
         mCustomerInfo = findViewById(R.id.customerInfo);
         mCustomerName = findViewById(R.id.customerName);
         mCustomerPhone = findViewById(R.id.customerPhone);
@@ -137,9 +145,10 @@ public class MechanicMapActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void run() {
                 mCustomerInfo.setVisibility(View.VISIBLE);
+                btnServiceDetails.setVisibility(View.VISIBLE);
             }
         });
-        DatabaseReference mCustomerDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(customerId);
+        final DatabaseReference mCustomerDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(customerId);
         mCustomerDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -153,6 +162,10 @@ public class MechanicMapActivity extends AppCompatActivity implements OnMapReady
                     if(map.get("phone") != null){
                         mCustomerPhone.setText(map.get("phone").toString());
                     }
+                    if(map.get("email") != null){
+                        emailCustomer = map.get("email").toString();
+                    }
+
                 }
             }
 
@@ -184,10 +197,25 @@ public class MechanicMapActivity extends AppCompatActivity implements OnMapReady
                         locationLong = Double.parseDouble(map.get(1).toString()) ;
                     }
 
-                    LatLng serviceLatLng = new LatLng(locationLat,locationLong);
+                    serviceLatLng = new LatLng(locationLat,locationLong);
 
                     pickupMarker =  mMap.addMarker(new MarkerOptions().position(serviceLatLng).title("Pickup Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.diagnosis)));
                     //getRouteToMarker(serviceLatLng);
+                    DatabaseReference assignedCustomerServiceRef = FirebaseDatabase.getInstance().getReference().child("customerRequests").child(customerId);
+                    assignedCustomerServiceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Map<String,Object> map = (Map<String, Object>)snapshot.getValue();
+                            serviceId = map.get("serviceId").toString();
+                            vehicleId = map.get("vehicleId").toString();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                 }
             }
 
@@ -410,5 +438,47 @@ public class MechanicMapActivity extends AppCompatActivity implements OnMapReady
             line.remove();
         }
         polylines.clear();
+    }
+
+    public void btnServiceDetailClick(View view) {
+
+
+        Intent intent = new Intent(MechanicMapActivity.this,CompleteServiceDetails.class);
+        intent.putExtra("userEmail",emailCustomer);
+        intent.putExtra("serviceId",serviceId);
+        intent.putExtra("vehicleId",vehicleId);
+        intent.putExtra("ServiceLocationLatitude",String.valueOf(serviceLatLng.latitude));
+        intent.putExtra("ServiceLocationLongitude",String.valueOf(serviceLatLng.longitude));
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference mechanicRef = FirebaseDatabase.getInstance().getReference().child("Users")
+                .child("Mechanics")
+                .child(userId)
+                .child("customerRequests");
+        mechanicRef.removeValue();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("customerRequests");
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.removeLocation(customerId, new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+
+            }
+        });
+        customerId = "";
+        if(assignedCustomerPickupLocationRefListener!=null)
+        {
+            assignedCustomerPickupLocationRef.removeEventListener(assignedCustomerPickupLocationRefListener);
+        }
+        mCustomerInfo.setVisibility(View.GONE);
+        mCustomerName.setText("");
+        mCustomerPhone.setText("");
+
+        if(pickupMarker != null){
+            pickupMarker.remove();
+        }
+
+        startActivity(intent);
+        finish();
     }
 }

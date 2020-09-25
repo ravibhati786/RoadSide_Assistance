@@ -6,14 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MechanicVehicleActivity extends AppCompatActivity {
 
@@ -55,8 +50,8 @@ public class MechanicVehicleActivity extends AppCompatActivity {
 
            listView = findViewById(R.id.mechvehiclelistview);
 
-           AdapterMechanicVehicleListView adapter = new AdapterMechanicVehicleListView(this,VehicleName,VehicleNumber,VehicleModel,VehicleMake,VehicleImage);
-           listView.setAdapter(adapter);
+           //AdapterCustomerVehicleListView adapter = new AdapterCustomerVehicleListView(this,VehicleName,VehicleNumber,VehicleModel,VehicleMake,VehicleImage);
+           //listView.setAdapter(adapter);
 
 
 
@@ -66,7 +61,7 @@ public class MechanicVehicleActivity extends AppCompatActivity {
     private void UploadVehicleMechanic() {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        View mview = getLayoutInflater().inflate(R.layout.custome_mechanic_vehicle_add,null);
+        View mview = getLayoutInflater().inflate(R.layout.custom_customer_vehicle_add,null);
 
        // Spinner mspinner = mview.findViewById(R.id.spinnerdoctype);
         //String[] value = {"Select document type","Pan Card","Adhar Card"," Driving Licence","Registration Certificate(RC)"};

@@ -19,12 +19,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.firebase.geofire.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,6 +53,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,9 +84,14 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
     private Button requestbtn;
     Button btn2;
     View v;
+    Spinner spinnerServiceName, spinnerVehicleName;
 
     private LinearLayout mMechanicInfo;
     private TextView mMechanicName, mMechanicPhone;
+
+    private List<String> listServices;
+    private List<VehiclePojoForSpinner> vehicleList;
+    String serviceId,vehicleId;
 
 
     @Override
@@ -92,35 +108,14 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
         mMechanicName = v.findViewById(R.id.mechanicName);
         mMechanicPhone = v.findViewById(R.id.mechanicPhone);
 
-        /*
-        Button requestbtn = v.findViewById(R.id.newservicerequest);
-        requestbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-           //     Toast.makeText(getContext(), "its working", Toast.LENGTH_SHORT).show();
+        listServices = new ArrayList<>();
+        vehicleList = new ArrayList<>();
 
-              //  FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-               // fragmentTransaction.replace(R.id.fragmentLayout,new RequestMechanicFragment());
-                //fragmentTransaction.commit();
-                //Bundle args = new Bundle();
-                //BottomSheet bottomSheet = new BottomSheet();
-               // args.putParcelable("mlastlocation",mLastLocation);
-               // bottomSheet.setArguments(args);
-               // bottomSheet.show(getActivity().getSupportFragmentManager(), "bottomSheet");
+        spinnerServiceName = v.findViewById(R.id.spinnerservicerquest);
+        spinnerVehicleName = v.findViewById(R.id.spinnervehicle);
+        loadServiceSpinnerData();
+        loadVehicleSpinnerData();
 
-               final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext(),
-                        R.style.BottomSheetDialogTheme);
-
-                View bottomSheetView = LayoutInflater.from(getContext().getApplicationContext()).inflate(
-                        R.layout.bottom_sheet_diolog,(LinearLayout)v.findViewById(R.id.bottomSheetContainer));
-                        bottomSheetView.findViewById(R.id.bottmsheetrequestbtn).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Toast.makeText(getContext(), "its working", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });*/
         requestbtn = v.findViewById(R.id.bottmsheetrequestbtn);
 
 
@@ -165,6 +160,7 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
                     requestBool = true;
                     String uid = FirebaseAuth.getInstance().getUid();
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("customerRequests");
+
                     GeoFire geoFire = new GeoFire(ref);
                     geoFire.setLocation(uid, new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), new GeoFire.CompletionListener() {
                         @Override
@@ -172,6 +168,11 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
 
                         }
                     });
+                    DatabaseReference refRequest = FirebaseDatabase.getInstance().getReference("customerRequests").child(uid);
+                    Map serviceInfo = new HashMap();
+                    serviceInfo.put("serviceId",serviceId);
+                    serviceInfo.put("vehicleId",vehicleId);
+                    refRequest.updateChildren(serviceInfo);
 
                     pickupLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                     pickupMarker = mMap.addMarker(new MarkerOptions().position(pickupLocation).title("Pickup Here"));
@@ -180,31 +181,48 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
 
                     getClosestMechanic();
                 }
-                /*FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentLayout,new RequestMechanicFragment());
-                fragmentTransaction.addToBackStack(null).commit();
-                */
 
             }
         });
 
-        Spinner spinnerservice = v.findViewById(R.id.spinnerservicerquest);
-        String[] value = {"Select service","Towing service","Accidental towing","Battery Jumpstart","Flat tire","Minor on-site repair","Lost or locked key","Fuel problem","Medical coordination.","24x7 roadside assistance","Taxi services"};
-        ArrayList<String> arrayList = new  ArrayList<>(Arrays.asList(value));
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),R.layout.style_spinner,arrayList);
-        spinnerservice.setAdapter(arrayAdapter);
+        spinnerServiceName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0)
+                {
+                    Toast.makeText(getContext(), "Please Select Service", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    serviceId = String.valueOf(i);
+                }
+            }
 
-        Spinner spinnervehicle = v.findViewById(R.id.spinnervehicle);
-        String[] value2 = {"Select vehicle","Royal Enfield Classic 350","Honda Activa 6G","Bajaj Pulsar","TVS Apache RTR 160"};
-        ArrayList<String> arrayList2 = new  ArrayList<>(Arrays.asList(value2));
-        ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<>(getActivity(),R.layout.style_spinner,arrayList2);
-        spinnervehicle.setAdapter(arrayAdapter2);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
+        spinnerVehicleName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                VehiclePojoForSpinner vehiclePojoForSpinner = (VehiclePojoForSpinner)adapterView.getSelectedItem();
+                if(vehiclePojoForSpinner.getvId().equals("0")){
+                    Toast.makeText(getContext(), "Please Select a vehicle!!!!!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    vehicleId = vehiclePojoForSpinner.getvId();
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         return v;
-
 
     }
 
@@ -233,6 +251,7 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
 
                     getMechanicLocation();
                     getMechanicInfo();
+                    getHasServiceEnded();
                     requestbtn.setText("Looking for Mechanic Location....");
                 }
 
@@ -262,6 +281,182 @@ public class CustomerMapFragment extends Fragment implements OnMapReadyCallback,
             }
         });
     }
+
+
+    private void loadServiceSpinnerData() {
+
+        final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
+
+
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.URL_FETCH_SERVICES,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    listServices.clear();
+                                    JSONObject obj = new JSONObject(response);
+
+                                    JSONArray serviceArray = obj.getJSONArray("Data");
+
+                                    listServices.add("--Select Service--");
+
+                                    for (int i = 0; i < serviceArray.length(); i++) {
+                                        JSONObject serviceObject = serviceArray.getJSONObject(i);
+                                        listServices.add(serviceObject.getString("ServiceName"));
+                                    }
+
+                                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(),R.layout.style_spinner, listServices);
+                                    dataAdapter.setDropDownViewResource(R.layout.style_spinner);
+                                    spinnerServiceName.setAdapter(dataAdapter);
+                                    loadingDialog.dismissDialog();
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                RequestHandler.getInstance(getContext()).addToRequestQueue(stringRequest);
+
+
+    }
+
+    private void loadVehicleSpinnerData() {
+
+        final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_FETCH_VEHICLE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //vehicleList.clear();
+                            //getting the whole json object from the response
+                            JSONObject obj = new JSONObject(response);
+
+
+                            //we have the array named hero inside the object
+                            //so here we are getting that json array
+                            JSONArray vehicleArray = obj.getJSONArray("Data");
+
+                            //vehicleList.add("--Select Service--");
+                            vehicleList.add(0,new VehiclePojoForSpinner("0","--Select Vehicle--"));
+
+                            //now looping through all the elements of the json array
+                            for (int i = 0; i < vehicleArray.length(); i++) {
+                                //getting the json object of the particular index inside the array
+                                JSONObject vehicleObject = vehicleArray.getJSONObject(i);
+
+                                //creating a vehicle object and giving them the values from json object
+                                VehiclePojoForSpinner vehicle = new VehiclePojoForSpinner(vehicleObject.getString("VehicleId"),
+                                        vehicleObject.getString("VehicleName"));
+
+                                //adding the hero to herolist
+                                vehicleList.add(vehicle);
+                            }
+
+                            // Creating adapter for spinner
+                            ArrayAdapter<VehiclePojoForSpinner> dataAdapter = new ArrayAdapter<>(getContext(), R.layout.style_spinner, vehicleList);
+
+                            // Drop down layout style - list view with radio button
+                            dataAdapter.setDropDownViewResource(R.layout.style_spinner);
+
+                            spinnerVehicleName.setAdapter(dataAdapter);
+
+                            loadingDialog.dismissDialog();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //displaying the error in toast if occurrs
+                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.i("Connection",error.getMessage());
+                        error.printStackTrace();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                Log.i("UserId",String.valueOf(new SharedPrefManager(getContext()).getLoggedUserId()));
+                params.put("UserId", String.valueOf(new SharedPrefManager(getContext()).getLoggedUserId()));
+                return params;
+            }
+        };
+
+        RequestHandler.getInstance(getContext()).addToRequestQueue(stringRequest);
+    }
+
+    private DatabaseReference serviceHasEndedRef;
+    private ValueEventListener mechanicHasCompletedServiceRefListener;
+    private void getHasServiceEnded(){
+        serviceHasEndedRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Mechanics").child(mechanicFoundId).child("customerRequests").child("customerId");
+        mechanicHasCompletedServiceRefListener = serviceHasEndedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+
+                }else{
+                    endService();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+
+    private void endService(){
+        requestBool = false;
+        geoQuery.removeAllListeners();
+        mechanicLocationRef.removeEventListener(mechanicLocationRefListener);
+        serviceHasEndedRef.removeEventListener(mechanicHasCompletedServiceRefListener);
+
+        if (mechanicFoundId != null){
+            DatabaseReference driverRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Mechanics").child(mechanicFoundId).child("customerRequest");
+            driverRef.removeValue();
+            mechanicFoundId = null;
+
+        }
+        mechanicFound = false;
+        radius = 1;
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("customerRequest");
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.removeLocation(userId, new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+
+            }
+        });
+
+        if(pickupMarker != null){
+            pickupMarker.remove();
+        }
+        if (mMechanicMarker != null){
+            mMechanicMarker.remove();
+        }
+        requestbtn.setText("Call Mechanic");
+
+        mMechanicInfo.setVisibility(View.GONE);
+        mMechanicName.setText("");
+        mMechanicPhone.setText("");
+    }
+
 
     private void getMechanicInfo() {
         Activity  act = (Activity)getContext();

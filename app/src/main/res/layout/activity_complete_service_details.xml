@@ -36,18 +36,15 @@
             android:layout_marginTop="20dp"
             android:id="@+id/edittext1"/>
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter the vehicle name "
             android:paddingBottom="10dp"
-            android:text="Lokesh Kumar"
             android:textSize="16dp"
             android:textColor="@color/black"
             android:inputType="text"
             android:backgroundTint="#e1e1e1"
-            android:layout_marginTop="20dp"
-            android:id="@+id/edittext_MvehicleName"/>
+            android:id="@+id/txtCustomerName"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -61,25 +58,22 @@
             android:layout_marginTop="20dp"
             android:id="@+id/edittext3"/>
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ramesh kumar"
             android:paddingBottom="10dp"
             android:textSize="16dp"
             android:textColor="@color/black"
             android:inputType="text"
             android:backgroundTint="#e1e1e1"
-            android:layout_marginTop="20dp"
-            android:id="@+id/edittext_MvehicleModel"/>
+            android:id="@+id/txtMechanicName"/>
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter the vehicle name "
             android:paddingBottom="10dp"
-            android:text="Service Complete Location"
+            android:text="Service Location"
             android:textSize="16dp"
             android:textColor="@color/black"
             android:inputType="text"
@@ -87,18 +81,15 @@
             android:layout_marginTop="20dp"
             android:id="@+id/edittext2"/>
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter the vehicle number"
             android:paddingBottom="10dp"
             android:textSize="16dp"
-            android:text="Sheoganj"
             android:textColor="@color/black"
-            android:inputType="text"
+            android:inputType="textPostalAddress"
             android:backgroundTint="#e1e1e1"
-            android:layout_marginTop="20dp"
-            android:id="@+id/edittext_MvehicleNumber"/>
+            android:id="@+id/txtServiceLocation"/>
 
 
         <TextView
@@ -106,30 +97,50 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:textSize="16dp"
-            android:text="Mechanic Contact"
+            android:text="ServiceName"
             android:textColor="@color/black"
             android:inputType="text"
             android:backgroundTint="#e1e1e1"
             android:layout_marginTop="20dp"
             android:id="@+id/edittext_Mvehicle"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="9089786750"
-            android:paddingBottom="10dp"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:inputType="text"
-            android:backgroundTint="#e1e1e1"
-            android:layout_marginTop="20dp"
-            android:id="@+id/edittext5"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:textSize="16dp"
-            android:text="Payment"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:id="@+id/txtServiceName"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:text="Vehicle Name"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:id="@+id/txtVehicleName"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:text="Service Status"
             android:textColor="@color/black"
             android:inputType="text"
             android:backgroundTint="#e1e1e1"
@@ -138,16 +149,12 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="250 "
             android:paddingBottom="10dp"
             android:textSize="16dp"
             android:textColor="@color/black"
             android:inputType="text"
             android:backgroundTint="#e1e1e1"
-            android:layout_marginTop="20dp"
-            android:id="@+id/edittext4"/>
-
-
+            android:id="@+id/etServiceStatus"/>
 
 
         <androidx.cardview.widget.CardView
@@ -165,12 +172,12 @@
             >
 
             <Button
-                android:id="@+id/uploadbtn"
+                android:id="@+id/btnServiceDetailsHistory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ripple_white"
                 android:ems="15"
-                android:text="@string/save"
+                android:text="Save Service Details"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
