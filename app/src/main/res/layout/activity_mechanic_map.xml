@@ -31,9 +31,6 @@
 
     </LinearLayout>
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,6 +53,13 @@
             android:paddingBottom="10sp"
             android:paddingTop="10sp"
             />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Service Finished"
+            android:visibility="gone"
+            android:onClick="btnServiceDetailClick"
+            android:id="@+id/btnServiceDetails"/>
     </LinearLayout>
 </FrameLayout>
 

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Vehicle"
+            android:textSize="25dp"
+            android:layout_gravity="center"/>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle name "
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_vehicleName"/>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle number"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_vehicleNumber"/>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle model"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_vehicleModel"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter the vehicle make"
+            android:paddingBottom="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:backgroundTint="#e1e1e1"
+            android:layout_marginTop="20dp"
+            android:id="@+id/edittext_vehicleMMake"/>
+
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/upload_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/green"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="5dp"
+            android:padding="16dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="visible"
+            >
+
+            <Button
+                android:id="@+id/uploadbtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_white"
+                android:ems="15"
+                android:text="Save Vehicle"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"/>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

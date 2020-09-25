@@ -151,6 +151,33 @@ public class MechanicDocumentActivity extends AppCompatActivity {
                 ///
             }
         });
+
+
+        mBuilder.setView(mview);
+        dialog = mBuilder.create();
+        dialog.show();
+
+        ivImage = mview.findViewById(R.id.selectImage);
+        uploaduImage = mview.findViewById(R.id.upload_Img);
+        uploaduImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if(checkPermission())
+                    {
+                        filepicker();
+                    }
+                    else{
+                        requestPermission();
+                    }
+                } else {
+                    filepicker();
+                }
+                // uploaduImage.setVisibility(View.INVISIBLE);
+            }
+        });
+
+
         mview.findViewById(R.id.savedocumentbtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,30 +253,6 @@ public class MechanicDocumentActivity extends AppCompatActivity {
             }
         });
 
-        mBuilder.setView(mview);
-        dialog = mBuilder.create();
-        dialog.show();
-
-        ivImage = mview.findViewById(R.id.selectImage);
-        uploaduImage = mview.findViewById(R.id.upload_Img);
-        uploaduImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= 23) {
-                    if(checkPermission())
-                    {
-                        filepicker();
-                    }
-                    else{
-                        requestPermission();
-                    }
-                } else {
-                    filepicker();
-                }
-                // uploaduImage.setVisibility(View.INVISIBLE);
-            }
-        });
-
 
     }
 
@@ -262,8 +265,10 @@ public class MechanicDocumentActivity extends AppCompatActivity {
 
 
     private void fillListView() {
+        final LoadingDialog loadingDialog = new LoadingDialog(this);
+        loadingDialog.startLoadingDialog();
         //creating a string request to send request to the url
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_FETCH_DOCUMENTS,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_FETCH_DOCUMENTS_MECHANIC,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -299,6 +304,8 @@ public class MechanicDocumentActivity extends AppCompatActivity {
                             //adding the adapter to listview
                             listView.setAdapter(adapter);
 
+                            loadingDialog.dismissDialog();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -315,6 +322,7 @@ public class MechanicDocumentActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Id", String.valueOf(new SharedPrefManager(getApplicationContext()).getLoggedUserId()));
+                Log.i("MechanicId",String.valueOf(new SharedPrefManager(getApplicationContext()).getLoggedUserId()));
                 return params;
             }
         };

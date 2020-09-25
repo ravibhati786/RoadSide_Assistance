@@ -23,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Add All Vehicle one by one"
+        android:id="@+id/txtMessage"
         android:textSize="18dp"
         android:layout_gravity="center"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton

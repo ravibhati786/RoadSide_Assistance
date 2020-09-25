@@ -128,27 +128,23 @@ public class CustomerDocumentFragment extends Fragment {
     }
 
     private void fillListView() {
-
+        final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
         //creating a string request to send request to the url
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_FETCH_DOCUMENTS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            //getting the whole json object from the response
                             JSONObject obj = new JSONObject(response);
 
-                            //we have the array named hero inside the object
-                            //so here we are getting that json array
                             JSONArray documentArray = obj.getJSONArray("Data");
 
                             if(documentArray.length()>0)
                             {
                                 txtMessage.setVisibility(View.GONE);
-
                             }
 
-                            //now looping through all the elements of the json array
                             for (int i = 0; i < documentArray.length(); i++) {
                                 //getting the json object of the particular index inside the array
                                 JSONObject documentObject = documentArray.getJSONObject(i);
@@ -165,6 +161,7 @@ public class CustomerDocumentFragment extends Fragment {
 
                             //adding the adapter to listview
                             listView.setAdapter(adapter);
+                            loadingDialog.dismissDialog();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -178,7 +175,7 @@ public class CustomerDocumentFragment extends Fragment {
                         Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 })
-        {
+            {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -191,6 +188,7 @@ public class CustomerDocumentFragment extends Fragment {
 
 
     }
+
 
     private void UploadDocumentCustomer() {
 
@@ -226,6 +224,32 @@ public class CustomerDocumentFragment extends Fragment {
             ///
             }
         });
+
+
+
+
+         mBuilder.setView(mview);
+         dialog = mBuilder.create();
+         dialog.show();
+
+         ivImage = mview.findViewById(R.id.selectImage);
+         uploaduImage = mview.findViewById(R.id.upload_Img);
+         uploaduImage.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                  if(Build.VERSION.SDK_INT>=23){
+                      if(checkPermission()){
+                          filepicker();
+                      }else {
+                          requestPermission();
+                      }
+                  }else{
+                      filepicker();
+                  }
+                // uploaduImage.setVisibility(View.INVISIBLE);
+             }
+         });
+
 
         mview.findViewById(R.id.savedocumentbtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,8 +301,6 @@ public class CustomerDocumentFragment extends Fragment {
                                 params.put("DocumentNumber", dNumber);
                                 params.put("DocumentType",selectedItem.getText().toString());
                                 params.put("UserId",String.valueOf(new SharedPrefManager(getContext()).getLoggedUserId()));
-
-
                                 return params;
                             }
 
@@ -293,37 +315,11 @@ public class CustomerDocumentFragment extends Fragment {
                         };
                         //adding the request to volley
                         Volley.newRequestQueue(getContext()).add(volleyMultipartRequest);
-
                     }
                 }).start();
 
             }
         });
-
-
-        mBuilder.setView(mview);
-         dialog = mBuilder.create();
-         dialog.show();
-
-         ivImage = mview.findViewById(R.id.selectImage);
-         uploaduImage = mview.findViewById(R.id.upload_Img);
-         uploaduImage.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                  if(Build.VERSION.SDK_INT>=23){
-                      if(checkPermission()){
-                          filepicker();
-                      }else {
-                          requestPermission();
-                      }
-                  }else{
-                      filepicker();
-                  }
-                // uploaduImage.setVisibility(View.INVISIBLE);
-             }
-         });
-             filename = mview.findViewById(R.id.filename);
-
     }
 
     public byte[] getFileDataFromDrawable(Bitmap bitmap) {
@@ -337,13 +333,9 @@ public class CustomerDocumentFragment extends Fragment {
 
     private void filepicker() {
         Toast.makeText(getContext(), "File Picker Call", Toast.LENGTH_SHORT).show();
-
         Intent openGallery = new Intent(Intent.ACTION_PICK);
         openGallery.setType("image/*");
         startActivityForResult(openGallery,REQUEST_GALLERY);
-
-
-
     }
 
     @Override

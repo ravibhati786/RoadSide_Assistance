@@ -35,6 +35,23 @@
         android:layout_weight="2">
 
         <TextView
+            android:text="Lokesh kumar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:id="@+id/txtMechanicName"/>
+
+        <ImageView
+            android:id="@+id/mechanicSignOut"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_baseline_power_settings_new_24"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
