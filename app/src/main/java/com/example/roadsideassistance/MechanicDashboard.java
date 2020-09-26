@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MechanicDashboard extends AppCompatActivity {
 
-GridLayout mechanicDashboardGrid;
+    GridLayout mechanicDashboardGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,11 @@ GridLayout mechanicDashboardGrid;
 
                     switch (item){
                         case 0 :Intent intent =  new Intent(MechanicDashboard.this,MechanicMapActivity.class);
-                                startActivity(intent);
-                                break;
+                            startActivity(intent);
+                            break;
+                        case 1 : Intent intent1 =  new Intent(MechanicDashboard.this,MechanicProfileActivity.class);
+                            startActivity(intent1);
+                            break;
                         case 2 :Intent intent2 =  new Intent(MechanicDashboard.this,MechanicDocumentActivity.class);
                             startActivity(intent2);
                             break;
