@@ -32,8 +32,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MechanicRecentDetails"></activity>
-        <activity android:name=".MechanicDashboard"></activity>
+        <activity android:name=".CustomerProfileActivity"></activity>
+        <activity android:name=".MechanicProfileActivity" />
+        <activity android:name=".MechanicRecentDetails" />
+        <activity android:name=".MechanicDashboard" />
         <activity android:name=".CompleteServiceDetails" />
         <activity android:name=".MechanicVehicleActivity" />
         <activity android:name=".MechanicDocumentActivity" />

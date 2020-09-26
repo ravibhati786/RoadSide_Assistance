@@ -3,6 +3,8 @@ package com.example.roadsideassistance;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.DeadObjectException;
@@ -26,7 +28,12 @@ import android.location.LocationManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.CDATASection;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CompleteServiceDetails extends AppCompatActivity {
@@ -54,8 +61,7 @@ public class CompleteServiceDetails extends AppCompatActivity {
         vehicleId = extra.getString("vehicleId");
         serviceLocationLatitude = extra.getString("ServiceLocationLatitude");
         serviceLocationLongitude = extra.getString("ServiceLocationLongitude");
-        LocationAddress locationAddress = new LocationAddress();
-        locationAddress.getAddressFromLocation(Double.parseDouble(serviceLocationLatitude),Double.parseDouble(serviceLocationLongitude),getApplicationContext(),new GeocoderHandler());
+
 
         fillServiceDetails();
         btnSaveServiceDetails.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +132,7 @@ public class CompleteServiceDetails extends AppCompatActivity {
                                 vehicleName.setText(dataObject.getString("VehicleName"));
                                 mechanicName.setText(new SharedPrefManager(getApplicationContext()).getLoggedName());
                                 userId = dataObject.getString("UserId");
+                                fillAddressFromLatLng();
                                 loadingDialog.dismissDialog();
                             }
                             
@@ -154,20 +161,21 @@ public class CompleteServiceDetails extends AppCompatActivity {
     }
 
 
-    public class GeocoderHandler extends Handler {
-        @Override
-        public void handleMessage(Message message) {
-            String locationAddress;
-            switch (message.what) {
-                case 1:
-                    Bundle bundle = message.getData();
-                    locationAddress = bundle.getString("address");
-                    break;
-                default:
-                    locationAddress = null;
-            }
-            serviceLocation.setText(locationAddress);
+
+
+    public void fillAddressFromLatLng(){
+        Geocoder geocoder;
+        List<Address> addresses = new ArrayList<>();
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(Double.parseDouble(serviceLocationLatitude),
+                    Double.parseDouble(serviceLocationLatitude), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        String address = addresses.get(0).getAddressLine(0);
+        serviceLocation.setText(address);
     }
 
 }

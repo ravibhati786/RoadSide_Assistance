@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -108,6 +109,14 @@ public class MainActivity extends AppCompatActivity  {
             navusername.setText(new SharedPrefManager(this).getLoggedName());
             TextView navuseremail = headerView.findViewById(R.id.useremail);
             navuseremail.setText(new SharedPrefManager(this).getLoggedEmail());
+            RoundedImageView roundedImageView = headerView.findViewById(R.id.userimage);
+
+            roundedImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(MainActivity.this,CustomerProfileActivity.class));
+                }
+            });
         }
 
 

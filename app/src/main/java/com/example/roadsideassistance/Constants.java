@@ -2,7 +2,7 @@ package com.example.roadsideassistance;
 
 public class Constants {
 
-    private static final String ROOT_URL ="https://082acecbfa0f.ngrok.io/RoadSideAssistanceDB/V1/";
+    private static final String ROOT_URL ="https://6c9976ee6da2.ngrok.io/RoadSideAssistanceDB/V1/";
     public static final String URL_REGISTER = ROOT_URL+"Register/registrationUser.php";
     public static final String URL_LOGIN = ROOT_URL+"Login/fetch_Result.php";
     public static final String URL_MECHANIC_REGISTER = ROOT_URL+"Register/registrationMechanic.php";
@@ -15,6 +15,8 @@ public class Constants {
     public static final String URL_FETCH_SERVICES = ROOT_URL+"Fetch_Result/fetch_Services.php";
     public static final String URL_SAVE_SERVICE_DETAILS = ROOT_URL+"ServiceHistory/save_serviceHistory.php";
     public static final String URL_ServiceNameVehicleNameUserName = ROOT_URL+"Fetch_Result/fetch_ServiceNameVehicleNameUserName.php";
+    public static final String URL_FETCH_SERVICE_HISTORY = ROOT_URL+"ServiceHistory/fetch_serviceHistory.php";
+    public static final String URL_FETCH_PROFILE = ROOT_URL+"Fetch_Result/fetch_Profile.php";
     //192.168.0.106/RoadSideAssistanceDB/v1/registrationUser.php
 
 }

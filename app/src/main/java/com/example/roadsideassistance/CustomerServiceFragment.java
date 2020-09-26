@@ -7,62 +7,118 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CustomerServiceFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class CustomerServiceFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public CustomerServiceFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CustomerServiceFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CustomerServiceFragment newInstance(String param1, String param2) {
-        CustomerServiceFragment fragment = new CustomerServiceFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-
-    }
+    TextView name,slocation,vname,sname,servicestatus;
+    ListView listView;
+    List<HistoryPojoClass> historyPojoClassList;
+    AdapterRecentDetailsListView adapterRecentDetailsListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customer_service, container, false);
 
+        View v =  inflater.inflate(R.layout.fragment_customer_service, container, false);
+
+
+        historyPojoClassList = new ArrayList<>();
+        listView = v.findViewById(R.id.custrecentdetailslistview);
+
+        View mview = getLayoutInflater().inflate(R.layout.recent_details_add,null);
+
+        name = mview.findViewById(R.id.name);
+        slocation = mview.findViewById(R.id.custservicelocation);
+        vname = mview.findViewById(R.id.custvehicle);
+        sname = mview.findViewById(R.id.custservice);
+        servicestatus = mview.findViewById(R.id.custservicestatus);
+
+        fillHistoryServicesListView();
+
+        return v;
+    }
+
+
+    public void fillHistoryServicesListView(){
+
+        final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_FETCH_SERVICE_HISTORY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            historyPojoClassList.clear();
+                            //getting the whole json object from the response
+                            JSONObject obj = new JSONObject(response);
+
+                            //we have the array named hero inside the object
+                            //so here we are getting that json array
+                            JSONArray historyArray = obj.getJSONArray("Data");
+
+                            //now looping through all the elements of the json array
+                            for (int i = 0; i < historyArray.length(); i++) {
+                                //getting the json object of the particular index inside the array
+                                JSONObject historyObject = historyArray.getJSONObject(i);
+
+                                //creating a vehicle object and giving them the values from json object
+                                HistoryPojoClass historyPojoClass = new HistoryPojoClass(historyObject.getString("AssistantName"),
+                                        historyObject.getString("VehicleName"),
+                                        historyObject.getString("ServiceName"),
+                                        historyObject.getString("ServiceStatus"),
+                                        historyObject.getString("ServiceLocation"));
+
+
+                                //adding the hero to vehicleList
+                                historyPojoClassList.add(historyPojoClass);
+                            }
+
+                            //creating custom adapter object
+                            adapterRecentDetailsListView = new AdapterRecentDetailsListView(historyPojoClassList, getContext());
+
+                            //adding the adapter to listview
+                            listView.setAdapter(adapterRecentDetailsListView);
+                            loadingDialog.dismissDialog();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //displaying the error in toast if occurrs
+                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("UserId", String.valueOf(new SharedPrefManager(getContext()).getLoggedUserId()));
+                return params;
+            }
+        };
+
+        RequestHandler.getInstance(getContext()).addToRequestQueue(stringRequest);
 
     }
 }
